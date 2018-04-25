@@ -12,4 +12,4 @@
 
 
 **Hope you enjoy the fun of Browsing, Thank you.** :smile:
-![Demo](https://github.com/kakkarja/WBO/blob/master/Vid/WBO.gif)
+![Demo](https://github.com/kakkarja/WBO/blob/master/Demo/WBO.gif)

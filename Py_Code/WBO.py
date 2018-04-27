@@ -19,7 +19,7 @@ class wboffline:
     def __init__(self,root):
         self.root = root
         root.title("Web Browsing Off-line")
-        root.geometry("300x30+400+220")
+        root.geometry("300x30+450+220")
         root.resizable(False,  False)
         self.root.bind('<Return>', self.gue)
         self.root.bind('<Control-P>', self.topdf)
@@ -32,6 +32,11 @@ class wboffline:
         
         self.file_menu.add_command(label='Save to PDF',  compound='left', 
                                    accelerator='Ctrl+P', command=self.topdf)
+        
+        self.about_menu = Menu(self.menu_bar, tearoff = 0)
+        self.menu_bar.add_cascade(label = 'About', menu = self.about_menu)
+        self.about_menu.add_command(label = 'Help',compound='left', 
+                                    command=self.about)
 
         self.st1 = StringVar()       
         self.fra1 = Frame(root)
@@ -75,7 +80,12 @@ class wboffline:
         except:
             mes.showerror('Error', sys.exc_info()[0])
     
-    # Save to PDF and view it in browser
+    '''
+    # Save to PDF and view it in browser. Please download
+    # wkhtmltopdf.exe file in:
+    # https://wkhtmltopdf.org/downloads.html
+    # to be able to use this function.
+    '''
     def topdf(self, event = None):
         try:
             config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
@@ -96,7 +106,12 @@ class wboffline:
             mes.showerror('Error', sys.exc_info()[0])
         finally:
             on = str(Path.home())+ '\\out.pdf'  
-            webbrowser.open('file://' + on)    
+            webbrowser.open('file://' + on)  
+            
+    # Link to lWW Github page
+    def about(self):
+        webbrowser.open_new(r"https://github.com/kakkarja/WBO")
+        
             
 begin = Tk()
 my_gui = wboffline(begin)

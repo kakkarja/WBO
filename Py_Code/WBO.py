@@ -108,7 +108,7 @@ class wboffline:
             on = str(Path.home())+ '\\out.pdf'  
             webbrowser.open('file://' + on)  
             
-    # Link to lWW Github page
+    # Link to WBO Github page
     def about(self):
         webbrowser.open_new(r"https://github.com/kakkarja/WBO")
         

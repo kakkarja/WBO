@@ -112,9 +112,9 @@ class wboffline:
     def about(self):
         webbrowser.open_new(r"https://github.com/kakkarja/WBO")
         
-            
-begin = Tk()
-my_gui = wboffline(begin)
-begin.mainloop()
+if __name__ == '__main__':            
+    begin = Tk()
+    my_gui = wboffline(begin)
+    begin.mainloop()
 
 

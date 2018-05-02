@@ -116,5 +116,3 @@ if __name__ == '__main__':
     begin = Tk()
     my_gui = wboffline(begin)
     begin.mainloop()
-
-

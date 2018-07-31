@@ -12,6 +12,7 @@ import webbrowser,os
 from pathlib import Path
 import sys
 import pdfkit
+import time
 
 # Create web browse off-line
 class wboffline:
@@ -21,7 +22,7 @@ class wboffline:
         root.title("Web Browsing Off-line")
         root.geometry("300x30+450+220")
         root.resizable(False,  False)
-        self.root.bind('<Return>', self.gue)
+        self.root.bind('<Return>', self.wbp)
         self.root.bind('<Control-P>', self.topdf)
         self.root.bind('<Control-p>', self.topdf)
 
@@ -46,18 +47,27 @@ class wboffline:
         self.ent1 = Entry(self.fra1, textvariable=self.st1, width = 37)
         self.ent1.pack(side = LEFT)
         self.ent1.focus()
-        self.but1 = Button(self.fra1, text="Save", command = self.gue)
-        self.but1.pack(side = LEFT, padx=2)
+        self.but1 = Button(self.fra1, text="Save", command = self.wbp)
+        self.but1.pack(side = LEFT, padx=3)
         
         self.h_path = str(Path.home()) + "\\Documents"
+
+        try:
+            self.h_path = str(Path.home()) + "\\Documents\\WBO_Files"
+            ch = os.chdir(self.h_path)
+        except:
+            os.mkdir(self.h_path)
+            ms = 'has been created.'
+            mes.showinfo('WBO', 'The path to WBO_Files, {}'.format(ms))
         
         # Change Icon of tkinter
-        self.root.iconbitmap(self.h_path + "\\WBO.ico")
+        dir_p ='C:\\Program Files\\K A K\\WBO'
+        self.root.iconbitmap(dir_p + "\\WBO.ico")
 
     # Get the page and saved to a html file in computer
-    def gue(self, event = None):
+    def wbp(self, event = None):
+        ck = self.st1.get()
         try:
-            ck = self.st1.get()
             if str(ck)[:8] != 'https://':
                 with requests.Session() as s:
                     req = s.get('https://' + ck)
@@ -67,18 +77,17 @@ class wboffline:
                     
             soup = BeautifulSoup(req.text, 'html.parser')
             text = str(soup).replace('\n',"").replace('\t',
-                      "").replace('\r',"").replace('href=',
-                      "").replace('action=',"").replace('image='," ").encode('ascii',
-                      'xmlcharrefreplace')
-            on = str(Path.home())
-            os.chdir(on)
-            with open('wbo1.html','w') as sw:
+                    "").replace('\r',"").replace('href=',
+                    "").replace('action=',"").replace('image='," ").encode('ascii',
+                    'xmlcharrefreplace')
+            s_name = time.ctime(time.time()).replace(' ','').replace(':','') + '_' + ck + '.html'
+            with open(s_name,'w') as sw:
                 sw.write(str(text))
                 sw.close
-            on = str(Path.home())+ '\\wbo1.html'  
-            webbrowser.open('file://' + on)
+            on = self.h_path + '\\' + s_name
+            os.startfile(on)
         except:
-            mes.showerror('Error', sys.exc_info()[0])
+            mes.showerror('Error', sys.exc_info()[0:])
     
     '''
     # Save to PDF and view it in browser. Please download
@@ -87,26 +96,25 @@ class wboffline:
     # to be able to use this function.
     '''
     def topdf(self, event = None):
+        config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
+        options = {'quiet': ''}
+        ck = self.st1.get()
+        s_name = time.ctime(time.time()).replace(' ','').replace(':','') + '_' + ck + '.pdf'
+        with open(s_name,'w') as trun:
+            trun.truncate()
+            trun.close()
         try:
-            config = pdfkit.configuration(wkhtmltopdf='C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')
-            options = {'quiet': ''}
-            with open(str(Path.home())+ '\\out.pdf','w') as trun:
-                trun.truncate()
-                trun.close()
-                
-            ck = self.st1.get()
             if str(ck)[:8] != 'https://':
-                pdfkit.from_url('https://' + ck, str(Path.home()) + '\\out.pdf',
+                pdfkit.from_url('https://' + ck, s_name,
                                 configuration=config, options = options)
             else:
-                pdfkit.from_url(ck, str(Path.home())+ '\\out.pdf', 
+                pdfkit.from_url(ck, s_name, 
                                 configuration=config, options = options)
-
         except:
-            mes.showerror('Error', sys.exc_info()[0])
+            mes.showerror('Error', sys.exc_info()[0:])
         finally:
-            on = str(Path.home())+ '\\out.pdf'  
-            webbrowser.open('file://' + on)  
+            on = self.h_path + '\\' + s_name
+            os.startfile(on)  
             
     # Link to WBO Github page
     def about(self):
